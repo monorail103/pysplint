@@ -35,6 +35,7 @@ game_active = False
 sign = "none"  # サインの初期値
 strikes = 0
 balls = 0
+hittype = ""
 
 # ボタンの描画関数
 def draw_button(text, x, y, width, height, action=None):
@@ -55,21 +56,22 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            if not game_active:
-                game_active = True
-                current_player = players[current_player_index]
-                hittype, hit, balls, strikes, outs = at_bat(current_player, sign)
-                if hit > 0:
-                    bases, score = advance_bases(hit, bases, score)
-                    
-                if balls < 4 and strikes < 3:
-                    game_active = False
-                else:
-                    current_player_index = (current_player_index + 1) % 9
-                    balls = 0
-                    strikes = 0
-                    game_active = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                if not game_active:
+                    game_active = True
+                    current_player = players[current_player_index]
+                    hittype, hit, balls, strikes, outs = at_bat(current_player, sign, outs)
+                    if hit > 0:
+                        bases, score = advance_bases(hit, bases, score)
+                        
+                    if balls < 4 and strikes < 3:
+                        game_active = False
+                    else:
+                        current_player_index = (current_player_index + 1) % 9
+                        balls = 0
+                        strikes = 0
+                        game_active = False
     
     # 画面の背景色を設定
     screen.fill((0, 128, 0))
@@ -97,6 +99,10 @@ while running:
     # ボール・ストライクのカウント表示
     count_text = font.render(f"Balls: {balls} Strikes: {strikes}", True, (255, 255, 255))
     screen.blit(count_text, (50, 200))
+
+    # タイプの表示
+    hittype_text = font.render(f"Hit: {hittype}", True, (255, 255, 255))
+    screen.blit(hittype_text, (50, 250))
     
     # 画面の更新
     pygame.display.flip()

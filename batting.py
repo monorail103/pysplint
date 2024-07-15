@@ -18,10 +18,9 @@ def advance_bases(hit, bases, score):
     return bases, score
 
 # 打席の結果を決定する関数
-def at_bat(player, sign):
+def at_bat(player, sign, outs):
     strikes = 0
     balls = 0
-    outs = 0
     hittype = ""
     while strikes < 3 and balls < 4:
         if sign == "bunt":

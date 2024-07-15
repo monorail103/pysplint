@@ -4,11 +4,14 @@ import sqlite3
 def getplayerdata():
     conn = sqlite3.connect('db/players.db')
     c = conn.cursor()
-    c.execute('SELECT * FROM players WHERE source = ?', (source,))
+    c.execute('SELECT * FROM players')
     playerdata = c.fetchone()
     conn.close()
     return playerdata
 
-def updateplayerdata():
-    # プレイヤーのデータを更新する
+# def updateplayerdata():
+#     # プレイヤーのデータを更新する
     
+def main():
+    playerdata = getplayerdata()
+    print(playerdata)
