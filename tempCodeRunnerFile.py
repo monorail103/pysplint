@@ -1,2 +1,0 @@
-playersample = getplayerdata()
-    print(playersample)
