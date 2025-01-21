@@ -22,6 +22,10 @@ class ReversiBoard:
         self.board[3][4] = BLACK
         self.board[4][3] = BLACK
         self.board[4][4] = WHITE
+    def save_board(self, filename):
+        with open(filename, 'w') as f:
+            for row in self.board:
+                f.write(''.join(row) + '\n')
 
     def display_board(self):
         print('  ' + ' '.join([str(i) for i in range(BOARD_SIZE)]))
@@ -133,20 +137,12 @@ def play_game():
     while not board.is_game_over():
         board.display_board()
         valid_moves = board.get_valid_moves(current_player)
-
         if not valid_moves:
             print(f"No valid moves for {current_player}. Skipping turn.")
             current_player = WHITE if current_player == BLACK else BLACK
             continue
 
         if current_player == BLACK:
-            print(f"CPU ({current_player})'s turn.")
-            move = find_best_move(board, current_player, depth=1)
-            if move:
-                board.make_move(current_player, *move)
-            else:
-                print("No valid moves for CPU. Skipping turn.")
-        else:
             # CPUのターン
             print(f"CPU ({current_player})'s turn.")
             move = find_best_move(board, current_player, depth=6)
@@ -154,6 +150,19 @@ def play_game():
                 board.make_move(current_player, *move)
             else:
                 print("No valid moves for CPU. Skipping turn.")
+        else:
+            # 人間のターン
+            print(f"Your turn ({current_player}).")
+            while True:
+                try:
+                    x, y = map(int, input("Enter your move (row and column): ").split())
+                    if (x, y) in valid_moves:
+                        board.make_move(current_player, x, y)
+                        break
+                    else:
+                        print("Invalid move. Try again.")
+                except ValueError:
+                    print("Invalid input. Enter row and column numbers separated by a space.")
 
         current_player = WHITE if current_player == BLACK else BLACK
 
